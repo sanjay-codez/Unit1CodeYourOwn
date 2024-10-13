@@ -1,6 +1,8 @@
 # player.py
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.prefabs.health_bar import HealthBar
+
 from weapon import Weapon, Bullet
 
 class Player:
@@ -12,6 +14,7 @@ class Player:
         self.bullets = []
         self.shoot_cooldown = .25  # Cooldown time in seconds
         self.last_shoot_time = 0
+        self.health = HealthBar(bar_color=color.lime.tint(-.25), roundness=.5, max_value=100, value=100, scale=(.5,.1))
 
     def update(self):
         if held_keys['shift']:
@@ -32,3 +35,11 @@ class Player:
             self.bullets.append(bullet)
 
         self.last_shoot_time = time.time()
+
+
+    def decrement_health(self, number):
+        # if number - then raise SkibidiCustomError
+        if self.health.value >= number:
+            self.health.value -= number
+        else:
+            self.health.value = 0

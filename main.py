@@ -20,7 +20,7 @@ toilets = []
 
 toilets.append(StandardToilet(position=(10, 10, 10)))  # Adjusted y to ensure proper placement
 toilets.append(FancyToilet(position=(-2, 0.5, -2)))
-
+sf = toilets[0].entity.add_script(SmoothFollow(target=player.controller, offset=(0,2,0), speed=.5))
 # Set up lighting and sky
 Sky()
 light = DirectionalLight()

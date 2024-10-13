@@ -7,6 +7,7 @@ class Toilet(ABC):
     def __init__(self, position):
         self.position = position
 
+
     @abstractmethod
     def flush(self):
         pass
@@ -20,11 +21,13 @@ class StandardToilet(Toilet):
             scale=(1, 1, 1),
             position=position,
             color=color.white,
-            collider='box'
+            #collider='box'
         )
+
 
     def flush(self):
         print("Standard toilet flush sound!")
+
 
 class FancyToilet(Toilet):
     def __init__(self, position):
@@ -34,8 +37,9 @@ class FancyToilet(Toilet):
             scale=(1.2, 1.2, 1.2),
             position=position,
             color=color.gold,
-            collider='box'
+            #collider='box'
         )
+
 
     def flush(self):
         print("Fancy toilet flush with music!")
