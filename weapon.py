@@ -5,17 +5,17 @@ import math
 
 class Weapon:
     def __init__(self, parent):
-        self.entity = Entity(parent=parent, model='quad', color=color.blue, scale=(0.1, 0.05))
-
-    # def shoot(self, the_position, the_rotation_z):
-    #     bullet = Bullet(the_position, the_rotation_z)
-    #     return bullet
+        # Position and orientation of the weapon in front of the player
+        self.entity = Entity(parent=parent, model='cube', color=color.blue, scale=(0.2, 0.1, 0.5), position=Vec3(0.5, -0.5, 1.5))
 
     def shoot(self):
-        bullet_position = camera.world_position + camera.forward * 1  # Offset from the camera to avoid immediate collision
-        bullet_direction = camera.forward  # The direction where the camera is looking
+        # Adjust the bullet to come from the weapon's current position
+        bullet_position = self.entity.world_position + self.entity.forward * 1  # Offset from the weapon to avoid collision
+        bullet_direction = self.entity.forward  # Shoot in the direction the weapon is pointing
         bullet = Bullet(position=bullet_position, direction=bullet_direction)
         return bullet
+
+
 class Bullet(Entity):
     def __init__(self, position, direction):
         super().__init__(model='cube', scale=0.1, color=color.red, position=position, collider='box')
