@@ -35,11 +35,12 @@ class Player:
 
         # print("bullets" + str(self.bullets))
     def shoot(self):
-        bullet = self.weapon.shoot() # pass in player position
-        if bullet:
-            self.bullets.append(bullet)
+        if time.time() - self.last_shoot_time >= self.shoot_cooldown:
+            bullet = self.weapon.shoot() # pass in player position
+            if bullet:
+                self.bullets.append(bullet)
 
-        self.last_shoot_time = time.time()
+            self.last_shoot_time = time.time()
 
 
     def decrement_health(self, number):

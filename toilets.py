@@ -23,7 +23,7 @@ class StandardToilet(Toilet):
             texture='assets/lunchly',
             texture_scale=(1, 1),
             #color=color.white,
-            name="Cameraman",
+            name="StandardToilet",
             collider='box'
         )
         self.player_entity = player_entity

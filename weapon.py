@@ -2,11 +2,12 @@
 import player
 from ursina import *
 import math
+from ursina.shaders import unlit_shader
 
 class Weapon:
     def __init__(self, parent):
         # Position and orientation of the weapon in front of the player
-        self.entity = Entity(parent=parent, model='cube', color=color.blue, scale=(0.2, 0.1, 0.5), position=Vec3(0.5, -0.5, 1.5))
+        self.entity = Entity(parent=parent, model='assets/MP5K', color=color.dark_gray, scale=(0.02, 0.01, 0.05), position=Vec3(0.5, -0.5, 1.5), shader=unlit_shader)
 
     def shoot(self):
         # Adjust the bullet to come from the weapon's current position
@@ -20,7 +21,7 @@ class Bullet(Entity):
     def __init__(self, position, direction):
         super().__init__(model='cube', scale=0.1, color=color.red, position=position, collider='box')
         self.direction = direction.normalized()  # Direction vector in which the bullet should move
-        self.speed = 5  # Adjust speed as necessary
+        self.speed = 50  # Adjust speed as necessary
         self.world_parent = scene
         self.alive = True
         invoke(self.destroy_bullet, delay=3)  # Automatically destroy bullet after 3 seconds

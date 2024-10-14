@@ -49,13 +49,18 @@ def start_game():
 
 # Set up the game loop
 def update():
+
     global flush_pressed
+
+
     if player:
         player.update()
-        # Additional game logic goes here
-        if mouse.left and time.time() - player.last_shoot_time >= player.shoot_cooldown:  # Fix key detection for shooting
+
+        if mouse.left:  #shooting
             player.shoot()
-        # Example: Check for interactions with toilets
+
+
+        #check for interactions with toilets
         for toilet in toilets:
             if (player.controller.position - toilet.entity.position).length() < 3:
                 print(f"Near the {toilet.__class__.__name__}! Press 'F' to flush.")
@@ -69,7 +74,7 @@ def update():
 app.update = update
 
 # Start Menu UI Elements
-title_text = Text(text='My 3D Game', scale=2, origin=(0, 0), y=0.3, color=color.white)
+title_text = Text(text='Skibidi Showdown', scale=5, origin=(0, 0), y=0.3, color=color.white)
 
 # Start Button
 start_button = Button(text='Start Game', color=color.azure, scale=(0.25, 0.1), y=-0.1)
