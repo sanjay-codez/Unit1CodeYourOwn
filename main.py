@@ -7,8 +7,8 @@ app = Ursina()
 # window.fullscreen = True
 
 # Create a flat platform for the player to stand on
-platform = Entity(model='plane', scale=(50, 1, 50), texture='white_cube', texture_scale=(50, 50), collider='box')
-
+#platform = Entity(model='plane', scale=(50, 1, 50), texture='white_cube', texture_scale=(50, 50), collider='box')
+platform = Entity(model='assets/arena', scale=(50, 1, 50), texture=None, texture_scale=(50, 50), collider='box')
 # Add some visual variety with colors or texture
 platform.color = color.gray
 

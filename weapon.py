@@ -18,7 +18,7 @@ class Weapon:
         return bullet
 class Bullet(Entity):
     def __init__(self, position, direction):
-        super().__init__(model='sphere', scale=0.1, color=color.red, position=position, collider='box')
+        super().__init__(model='cube', scale=0.1, color=color.red, position=position, collider='box')
         self.direction = direction.normalized()  # Direction vector in which the bullet should move
         self.speed = 5  # Adjust speed as necessary
         self.world_parent = scene
@@ -30,7 +30,12 @@ class Bullet(Entity):
             self.position += self.direction * self.speed * time.dt
             hit_info = self.intersects(ignore=[self])
             if hit_info.hit:
-                print(f"Bullet hit the {hit_info.entity.__class__.__name__}!")
+                # Check if the hit entity has a 'name' attribute
+                if hasattr(hit_info.entity, 'name'):
+                    entity_name = hit_info.entity.name
+                else:
+                    entity_name = hit_info.entity.__class__.__name__
+                print(f"Bullet hit the {entity_name}!")
                 self.destroy_bullet()
 
     def destroy_bullet(self):

@@ -19,8 +19,9 @@ def start_game():
     title_text.disable()
 
     # Create a flat platform for the player to stand on
-    platform = Entity(model='plane', scale=(50, 1, 50), texture='white_cube', texture_scale=(50, 50), collider='box')
+    platform = Entity(model='assets/arena',  texture=None, texture_scale=(50, 50),  position=(0, 7.5, 0))
 
+    platform = Entity(model='plane', scale=(10000, 1, 10000), texture='white_cube', texture_scale=(50, 50), collider='box')
     # Add some visual variety with colors or texture
     platform.color = color.gray
 
@@ -30,9 +31,10 @@ def start_game():
     # Create a list of toilet objects
     toilets = []
 
-    toilets.append(StandardToilet(position=(10, 0.5, 10)))  # Adjusted y to ensure proper placement
-    toilets.append(FancyToilet(position=(-2, 0.5, -2)))
-    sf = toilets[0].entity.add_script(SmoothFollow(target=player.controller, offset=(0, 2, 0), speed=.5))
+    # Pass the toilets list itself to each toilet's constructor
+    toilets.append(StandardToilet(position=(10, 0.5, 10), player_entity=player.controller, all_toilets=toilets))
+    toilets.append(FancyToilet(position=(-2, 0.5, -2), player_entity=player.controller, all_toilets=toilets))
+    #sf = toilets[0].entity.add_script(SmoothFollow(target=player.controller, offset=(0, 2, 0), speed=.5))
 
     # Set up lighting and sky
     Sky()
@@ -49,7 +51,7 @@ def update():
             player.shoot()
         # Example: Check for interactions with toilets
         for toilet in toilets:
-            if (player.controller.position - toilet.entity.position).length() < 2:
+            if (player.controller.position - toilet.entity.position).length() < 3:
                 print(f"Near the {toilet.__class__.__name__}! Press 'F' to flush.")
                 if keyboard.is_pressed('f') and not flush_pressed:  # Check if 'f' was pressed, not held
                     toilet.flush()
