@@ -34,12 +34,18 @@ def start_game():
     # Pass the toilets list itself to each toilet's constructor
     toilets.append(StandardToilet(position=(10, 0.5, 10), player_entity=player.controller, all_toilets=toilets))
     toilets.append(FancyToilet(position=(-2, 0.5, -2), player_entity=player.controller, all_toilets=toilets))
-    #sf = toilets[0].entity.add_script(SmoothFollow(target=player.controller, offset=(0, 2, 0), speed=.5))
+
 
     # Set up lighting and sky
     Sky()
-    light = DirectionalLight()
+    light = DirectionalLight(shadows=True)
     light.look_at(Vec3(1, -1, -1))
+
+    # Ambient light to fill in the darker areas
+    #ambient_light = AmbientLight(color=color.rgb(1, 1, 1), intensity=0.01)
+
+    # Adding a point light for softer, focused illumination
+    point_light = PointLight(position=(0, 10, 0), color=color.rgb(1, 1, 1), intensity=0.01)
 
 # Set up the game loop
 def update():

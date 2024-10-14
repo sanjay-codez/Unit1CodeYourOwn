@@ -1,6 +1,7 @@
 # toilets.py
 from ursina import *
 from abc import ABC, abstractmethod
+from math import atan2, degrees
 
 # Abstract Base Class for Toilets
 class Toilet(ABC):
@@ -35,11 +36,12 @@ class FancyToilet(Toilet):
     def __init__(self, position, player_entity, all_toilets):
         super().__init__(position)
         self.entity = Entity(
-            model='cube',
-            scale=(1.2, 1.2, 1.2),
+            model='assets/man.fbx',
+            scale=(.005, .005, .005),
             position=position,
-            color=color.gold,
+            color=color.smoke,
             name="FancyToilet",
+            double_sided=True,
             collider='box'
         )
         self.player_entity = player_entity
@@ -60,6 +62,17 @@ class CustomSmoothFollow(SmoothFollow):
         distance_to_player = (self.target.position - self.entity.position).length()
         if distance_to_player > self.min_distance:
             super().update()  # Call the original update to follow the player
+
+        # Smoothly rotate the toilet to face the player on the Y-axis only
+        target_direction = (self.target.position - self.entity.position).normalized()
+        # Calculate the desired yaw (rotation around the Y-axis)
+        desired_rotation_y = atan2(target_direction.x, target_direction.z)
+        current_rotation_y = self.entity.rotation_y
+        self.entity.rotation_y = lerp(current_rotation_y, degrees(desired_rotation_y), time.dt * 2)
+
+        # Ensure the toilet doesn't rotate around the X or Z axis (feet on the ground)
+        self.entity.rotation_x = 0
+        self.entity.rotation_z = 0
 
         # make sure the toilets don't overlap each other
         for other in self.all_toilets:
