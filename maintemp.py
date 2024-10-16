@@ -13,7 +13,7 @@ flush_pressed = False
 
 # Start Menu Elements
 def start_game():
-    background_music = Audio('background_music.mp3', loop=True, autoplay=True)
+    background_music = Audio('background_music.mp3', loop=True, autoplay=True, volume=0.2)
 
     global player, toilets
     start_button.disable()
