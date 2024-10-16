@@ -17,9 +17,9 @@ class Player:
         self.weapon.entity.rotation = Vec3(0, 0, 0)  # Make sure it's oriented correctly
 
         self.bullets = []
-        self.shoot_cooldown = .25  # Cooldown time in seconds
+        self.shoot_cooldown = .1  # Cooldown time in seconds
         self.last_shoot_time = 0
-        self.health = HealthBar(bar_color=color.lime.tint(-.25), curve=.5, max_value=100, value=100, scale=(.5, .1))
+        self.health = HealthBar(bar_color=color.lime.tint(-.25), curve=.5, max_value=100, value=100, scale=(.35, .05))
 
     def update(self):
         if held_keys['shift']:

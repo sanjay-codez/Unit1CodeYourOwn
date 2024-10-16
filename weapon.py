@@ -3,12 +3,14 @@ import player
 from ursina import *
 import math
 from ursina.shaders import unlit_shader
+from ursina import Audio
+
 
 
 class Weapon:
     def __init__(self, parent):
         # Position and orientation of the weapon in front of the player
-        self.entity = Entity(parent=parent, model='assets/MP5K', color=color.dark_gray, scale=(0.02, 0.01, 0.05),
+        self.entity = Entity(parent=parent, model='assets/MP5K', color=color.black, scale=(0.02, 0.01, 0.05),
                              position=Vec3(0.5, -0.5, 1.5), shader=unlit_shader)
 
     def shoot(self):
@@ -18,6 +20,8 @@ class Weapon:
         # Use the camera's forward direction for accurate aiming
         bullet_direction = camera.forward.normalized()  # Make the bullet direction match the camera's forward direction
 
+        Audio('shoot_sound.mp3', autoplay=True)
+        
         # Create and shoot the bullet
         bullet = Bullet(position=bullet_position, direction=bullet_direction)
         return bullet
