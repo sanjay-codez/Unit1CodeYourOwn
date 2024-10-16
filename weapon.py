@@ -3,8 +3,7 @@ import player
 from ursina import *
 import math
 from ursina.shaders import unlit_shader
-from ursina import Audio
-
+from ursina import Audio, lerp, Sequence
 
 
 class Weapon:
@@ -14,14 +13,14 @@ class Weapon:
                              position=Vec3(0.5, -0.5, 1.5), shader=unlit_shader)
 
     def shoot(self):
-        # Set the bullet position to the front of the weapon
+        # Check if ammo is available before shooting
         bullet_position = self.entity.world_position + self.entity.forward * 1  # Offset from the weapon to avoid collision
 
         # Use the camera's forward direction for accurate aiming
         bullet_direction = camera.forward.normalized()  # Make the bullet direction match the camera's forward direction
 
         Audio('shoot_sound.mp3', autoplay=True)
-        
+
         # Create and shoot the bullet
         bullet = Bullet(position=bullet_position, direction=bullet_direction)
         return bullet
