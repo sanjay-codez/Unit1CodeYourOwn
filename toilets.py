@@ -2,6 +2,17 @@
 from ursina import *
 from abc import ABC, abstractmethod
 from math import atan2, degrees
+import time
+
+
+
+
+
+
+
+
+###############################################################################
+###############################################################################
 
 # Abstract Base Class for Toilets
 class Toilet(ABC):
@@ -17,20 +28,29 @@ class StandardToilet(Toilet):
     def __init__(self, position, player_entity, all_toilets):
         super().__init__(position)
         self.entity = Entity(
-            model='cube',
-            scale=(1.2, 1.2, 1.2),
+            model='assets/man.fbx',
+            scale=(.005, .005, .005),
             position=position,
-            texture='assets/lunchly',
-            texture_scale=(1, 1),
-            #color=color.white,
+            color=color.smoke,
             name="StandardToilet",
+            double_sided=True,
             collider='box'
         )
         self.player_entity = player_entity
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
+        self.last_attack_time = 0
 
-    def flush(self):
+
+
+    def flush(self, player):
         print("Standard toilet flush sound!")
+
+        distance_to_player = (self.player_entity.position - self.entity.position).length()
+        current_time = time.time()
+        if distance_to_player < 3 and current_time - self.last_attack_time >= 1:
+            player.decrement_health(random.randint(3, 5))
+            self.last_attack_time = current_time
+
 
 class FancyToilet(Toilet):
     def __init__(self, position, player_entity, all_toilets):
@@ -39,16 +59,30 @@ class FancyToilet(Toilet):
             model='assets/man.fbx',
             scale=(.005, .005, .005),
             position=position,
-            color=color.smoke,
+            color=color.gold,
             name="FancyToilet",
             double_sided=True,
             collider='box'
         )
         self.player_entity = player_entity
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
+        self.last_attack_time = 0
 
-    def flush(self):
+
+    def flush(self, player):
         print("Fancy toilet flush with music!")
+
+        distance_to_player = (self.player_entity.position - self.entity.position).length()
+        current_time = time.time()
+        if distance_to_player < 3 and current_time - self.last_attack_time >= 1:
+            player.decrement_health(random.randint(3, 5))
+            self.last_attack_time = current_time
+
+
+###############################################################################
+###############################################################################
+
+
 
 # Custom SmoothFollow Script
 class CustomSmoothFollow(SmoothFollow):

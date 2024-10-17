@@ -9,7 +9,7 @@ app = Ursina()
 # Global variables
 player = None
 toilets = []
-flush_pressed = False
+# flush_pressed = False
 
 # Start Menu Elements
 def start_game():
@@ -54,7 +54,7 @@ def update():
 
     global flush_pressed
 
-
+    #player shooting stuff
     if player:
         player.update()
 
@@ -62,16 +62,22 @@ def update():
             player.shoot()
 
 
-        #check for interactions with toilets
-        for toilet in toilets:
-            if (player.controller.position - toilet.entity.position).length() < 3:
-                print(f"Near the {toilet.__class__.__name__}! Press 'F' to flush.")
-                if keyboard.is_pressed('f') and not flush_pressed:  # Check if 'f' was pressed, not held
-                    toilet.flush()
-                    player.decrement_health(1)
-                    flush_pressed = True
-                if not keyboard.is_pressed('f'):
-                    flush_pressed = False
+    #toilet attacking stuff
+    for toilet in toilets:
+        toilet.flush(player)
+
+
+
+        # #check for interactions with toilets
+        # for toilet in toilets:
+        #     if (player.controller.position - toilet.entity.position).length() < 3:
+        #         print(f"Near the {toilet.__class__.__name__}! Press 'F' to flush.")
+        #         if keyboard.is_pressed('f') and not flush_pressed:  # Check if 'f' was pressed, not held
+        #             toilet.flush()
+        #             player.decrement_health(1)
+        #             flush_pressed = True
+        #         if not keyboard.is_pressed('f'):
+        #             flush_pressed = False
 
 app.update = update
 
