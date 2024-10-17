@@ -76,3 +76,9 @@ class Player:
     def finish_reload(self):
         self.ammo = self.magazine_capacity
         self.reloading = False
+
+    def decrement_health(self, number):
+        self.health.value -= number
+        if self.health.value <= 0:
+            self.health.value = 0
+            print("Player has died.")
