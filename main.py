@@ -22,7 +22,7 @@ def start_game():
     other_button.disable()
     title_text.disable()
 
-    # Create a flat platform for the player to stand on
+    # create a flat platform
     platform = Entity(model='assets/arena',  texture=None, texture_scale=(50, 50),  position=(0, 7.5, 0))
 
     platform = Entity(model='plane', scale=(10000, 1, 10000), texture='white_cube', texture_scale=(50, 50), collider='box')
@@ -33,7 +33,7 @@ def start_game():
     player = Player()
     player.start_time = time.time()
 
-    # Create a list of toilet objects
+    # list of toilet objects
     toilets = []
 
     # Pass the toilets list itself to each toilet's constructor

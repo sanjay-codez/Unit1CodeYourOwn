@@ -1,6 +1,8 @@
 # toilets.py
+import abc
+
 from ursina import *
-from abc import ABC, abstractmethod
+import abc
 from math import atan2, degrees
 import time
 
@@ -15,21 +17,21 @@ import time
 ###############################################################################
 
 # Abstract Base Class for Toilets
-class Toilet(ABC):
+class Toilet(abc.ABC):
     def __init__(self, position):
         self.position = position
         self.health = 100
         self.max_health = 100
 
-    @abstractmethod
+    @abc.abstractmethod
     def flush(self):
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def update_health_bar(self):
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def decrement_health(self, amount):
         pass
 
@@ -182,6 +184,13 @@ class FancyToilet(Toilet):
 
 
 
+
+
+
+
+
+
+
 # Custom SmoothFollow Script
 class CustomSmoothFollow(SmoothFollow):
     def __init__(self, target, offset=(0, 0, 0), speed=1, all_toilets=[]):
@@ -206,7 +215,7 @@ class CustomSmoothFollow(SmoothFollow):
         self.entity.rotation_x = 0
         self.entity.rotation_z = 0
 
-        # make sure the toilets don't overlap each other
+        # make sure they don't overlap
         for other in self.all_toilets:
             if other.entity == self.entity:
                 continue
