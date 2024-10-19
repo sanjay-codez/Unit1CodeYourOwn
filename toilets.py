@@ -47,6 +47,7 @@ class StandardToilet(Toilet):
             collider='box'
         )
         self.player_entity = player_entity
+        self.all_toilets = all_toilets  # Save the reference to the toilets list
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
         self.last_attack_time = 0
 
@@ -58,7 +59,7 @@ class StandardToilet(Toilet):
             position=self.entity.position + Vec3(0, 3, 0),  # Place it above the toilet initially
             always_on_top=True  # Always render on top for better visibility
         )
-
+        self.entity.parent_toilet = self
 
     def update_health_bar(self):
         # Update the health bar size based on the current health
@@ -94,6 +95,15 @@ class StandardToilet(Toilet):
         if self.health < 0:
             self.health = 0
         self.update_health_bar()  # Update the health bar to reflect new health
+
+        # Add logic to destroy the toilet entity and remove from the toilets list
+        if self.health <= 0:
+            destroy(self.entity)
+            destroy(self.health_bar)
+
+            # Remove from the toilets list
+            if self in self.all_toilets:
+                self.all_toilets.remove(self)
 
 class FancyToilet(Toilet):
     def __init__(self, position, player_entity, all_toilets):
@@ -108,6 +118,7 @@ class FancyToilet(Toilet):
             collider='box'
         )
         self.player_entity = player_entity
+        self.all_toilets = all_toilets  # Save the reference to the toilets list
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
         self.last_attack_time = 0
 
@@ -119,7 +130,7 @@ class FancyToilet(Toilet):
             position=self.entity.position + Vec3(0, 3, 0),  # Place it above the toilet initially
             always_on_top=True  # Always render on top for better visibility
         )
-
+        self.entity.parent_toilet = self
 
     def update_health_bar(self):
         # Update the health bar size based on the current health
@@ -156,6 +167,15 @@ class FancyToilet(Toilet):
         if self.health < 0:
             self.health = 0
         self.update_health_bar()  # Update the health bar to reflect new health
+
+        # Add logic to destroy the toilet entity and remove from the toilets list
+        if self.health <= 0:
+            destroy(self.entity)
+            destroy(self.health_bar)
+
+            # Remove from the toilets list
+            if self in self.all_toilets:
+                self.all_toilets.remove(self)
 
 ###############################################################################
 ###############################################################################
