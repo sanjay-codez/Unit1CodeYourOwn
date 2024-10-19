@@ -1,7 +1,7 @@
 # main.py
 from ursina import *
 from player import Player
-from toilets import StandardToilet, FancyToilet
+from toilets import *
 import keyboard
 
 app = Ursina()
@@ -15,7 +15,7 @@ toilets = []
 
 # Start Menu Elements
 def start_game():
-    #background_music = Audio('background_music.mp3', loop=True, autoplay=True, volume=0.2)
+    #background_music = Audio('assets/background_music.mp3', loop=True, autoplay=True, volume=0.2)
 
     global player, toilets
     start_button.disable()
@@ -40,6 +40,9 @@ def start_game():
     toilets.append(StandardToilet(position=(10, 0.5, 10), player_entity=player.controller, all_toilets=toilets))
     toilets.append(FancyToilet(position=(-2, 0.5, -2), player_entity=player.controller, all_toilets=toilets))
 
+    # Add Cameramen
+    toilets.append(StandardCameraMan(position=(15, 0.5, 15), player_entity=player.controller, all_toilets=toilets))
+    toilets.append(FancyCameraMan(position=(-10, 0.5, -10), player_entity=player.controller, all_toilets=toilets))
 
     # Set up lighting and sky
     Sky()
@@ -60,7 +63,10 @@ def update():
         player.update()
 
     for toilet in toilets:
-        toilet.flush(player)
+        if hasattr(toilet, "flush"):
+            toilet.flush(player)
+        elif hasattr(toilet, "attack"):
+            toilet.attack(player)
         toilet.update_health_bar()  # Update health text every frame
 
 app.update = update

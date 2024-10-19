@@ -40,13 +40,13 @@ class Bullet(Entity):
             self.position += self.direction * self.speed * time.dt
             hit_info = self.intersects(ignore=[self])
             if hit_info.hit:
+                print(hit_info.entity.name)
                 # Step 1: Check if the hit entity has an attribute pointing back to the parent Toilet class
                 if hasattr(hit_info.entity, 'parent_toilet'):
                     # Step 2: Access the parent toilet and call its methods
                     parent_toilet = hit_info.entity.parent_toilet
-                    if isinstance(parent_toilet, toilets.Toilet):
+                    if isinstance(parent_toilet, toilets.Toilet) or isinstance(parent_toilet, toilets.CameraMan):
                         parent_toilet.decrement_health(7)  # Reduce health by 7
-
                 # Destroy bullet after collision
                 self.destroy_bullet()
 
