@@ -3,14 +3,17 @@ from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.health_bar import HealthBar
 from ursina import Audio, Text
-
+from ursina import invoke
 from weapon import Weapon, Bullet
+import time
 
 class Player:
     def __init__(self, position=(0, 2, 0), speed=5, jump_height=2):
         self.controller = FirstPersonController(position=position)
         self.controller.speed = speed
         self.controller.jump_height = jump_height
+
+        self.start_time = time.time()
 
         # Adjust weapon position to be visible in first-person view
         self.weapon = Weapon(parent=self.controller.camera_pivot)
@@ -32,16 +35,22 @@ class Player:
         self.ammo_counter = Text(text=f'MP5K: {self.ammo}/{self.magazine_capacity}', position=(0.70, -0.45), scale=2, origin=(0, 0), color=color.white)
 
     def update(self):
+        # Increase speed when holding shift
         if held_keys['shift']:
             self.controller.speed = 10
         else:
             self.controller.speed = 5
 
+        # Handle reload
         if held_keys['r'] and not self.reloading:
             self.reload()
 
-        if mouse.left and not self.reloading:  # Shooting when not reloading
-            self.shoot()
+        # Delay initial shooting after game start
+        if time.time() - self.start_time > 1:  # Only allow shooting 5 seconds after game starts
+            # Shooting mechanism with cooldown
+            if mouse.left and not self.reloading and time.time() - self.last_shoot_time >= self.shoot_cooldown:
+                self.shoot()
+                self.last_shoot_time = time.time()  # Update last shoot time to prevent immediate re-fire
 
         # Update bullets
         for bullet in self.bullets:
@@ -82,3 +91,6 @@ class Player:
         if self.health.value <= 0:
             self.health.value = 0
             print("Player has died.")
+
+
+

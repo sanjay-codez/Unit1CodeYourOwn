@@ -43,12 +43,11 @@ class StandardToilet(Toilet):
 
 
     def flush(self, player):
-        print("Standard toilet flush sound!")
-
         distance_to_player = (self.player_entity.position - self.entity.position).length()
         current_time = time.time()
         if distance_to_player < 3 and current_time - self.last_attack_time >= 1:
             player.decrement_health(random.randint(3, 5))
+            Audio('hit_sound.mp3', autoplay=True)  # Add hit sound playback here
             self.last_attack_time = current_time
 
 
@@ -75,7 +74,9 @@ class FancyToilet(Toilet):
         distance_to_player = (self.player_entity.position - self.entity.position).length()
         current_time = time.time()
         if distance_to_player < 3 and current_time - self.last_attack_time >= 1:
+
             player.decrement_health(random.randint(3, 5))
+            Audio('hit_sound.mp3', autoplay=True)  # Add hit sound playback here
             self.last_attack_time = current_time
 
 

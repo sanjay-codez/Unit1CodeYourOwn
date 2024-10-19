@@ -11,9 +11,11 @@ player = None
 toilets = []
 # flush_pressed = False
 
+
+
 # Start Menu Elements
 def start_game():
-    background_music = Audio('background_music.mp3', loop=True, autoplay=True, volume=0.2)
+    #background_music = Audio('background_music.mp3', loop=True, autoplay=True, volume=0.2)
 
     global player, toilets
     start_button.disable()
@@ -29,6 +31,7 @@ def start_game():
 
     # Create a player
     player = Player()
+    player.start_time = time.time()
 
     # Create a list of toilet objects
     toilets = []
@@ -49,17 +52,19 @@ def start_game():
     # Adding a point light for softer, focused illumination
     point_light = PointLight(position=(0, 10, 0), color=color.rgb(1, 1, 1), intensity=0.01)
 
+
+
 # Set up the game loop
 def update():
 
-    global flush_pressed
+    #global flush_pressed
 
     #player shooting stuff
     if player:
         player.update()
 
-        if mouse.left:  #shooting
-            player.shoot()
+        # if mouse.left:  #shooting
+        #     player.shoot()
 
 
     #toilet attacking stuff
