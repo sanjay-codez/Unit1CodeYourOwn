@@ -18,9 +18,19 @@ import time
 class Toilet(ABC):
     def __init__(self, position):
         self.position = position
+        self.health = 100
+        self.max_health = 100
 
     @abstractmethod
     def flush(self):
+        pass
+
+    @abstractmethod
+    def update_health_bar(self):
+        pass
+
+    @abstractmethod
+    def decrement_health(self, amount):
         pass
 
 # Different Toilet Types
@@ -40,7 +50,36 @@ class StandardToilet(Toilet):
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
         self.last_attack_time = 0
 
+        # Create the health bar entity
+        self.health_bar = Entity(
+            model='cube',  # Using 'quad' model to make it more visible
+            color=color.green,
+            scale=(3, 0.5, 0.1),  # Larger size to make it more visible
+            position=self.entity.position + Vec3(0, 3, 0),  # Place it above the toilet initially
+            always_on_top=True  # Always render on top for better visibility
+        )
 
+
+    def update_health_bar(self):
+        # Update the health bar size based on the current health
+        health_ratio = max(self.health / self.max_health, 0)  # Ensure health ratio is not below 0
+        self.health_bar.scale_x = health_ratio * 3  # Scale X-axis based on health (max length of 3)
+
+        # Change color based on health (Green -> Yellow -> Red)
+        if health_ratio > 0.5:
+            self.health_bar.color = color.green
+        elif 0.2 < health_ratio <= 0.5:
+            self.health_bar.color = color.yellow
+        else:
+            self.health_bar.color = color.red
+
+        # Update the position to always hover above the toilet
+        self.health_bar.position = self.entity.position + Vec3(0, 3, 0)  # Keep it above the entity
+
+
+        # Ensure the health bar always faces the camera (billboarding effect)
+        direction = (self.player_entity.position - self.health_bar.world_position).normalized()
+        self.health_bar.rotation = Vec3(0, degrees(atan2(direction.x, direction.z)), 0)
 
     def flush(self, player):
         distance_to_player = (self.player_entity.position - self.entity.position).length()
@@ -50,6 +89,11 @@ class StandardToilet(Toilet):
             Audio('hit_sound.mp3', autoplay=True)  # Add hit sound playback here
             self.last_attack_time = current_time
 
+    def decrement_health(self, amount):
+        self.health -= amount
+        if self.health < 0:
+            self.health = 0
+        self.update_health_bar()  # Update the health bar to reflect new health
 
 class FancyToilet(Toilet):
     def __init__(self, position, player_entity, all_toilets):
@@ -67,18 +111,51 @@ class FancyToilet(Toilet):
         self.entity.add_script(CustomSmoothFollow(target=player_entity, offset=(0, 2, 0), speed=.5, all_toilets=all_toilets))
         self.last_attack_time = 0
 
+        # Create the health bar entity
+        self.health_bar = Entity(
+            model='cube',  # Using 'quad' model to make it more visible
+            color=color.green,
+            scale=(3, 0.5, 0.1),  # Larger size to make it more visible
+            position=self.entity.position + Vec3(0, 3, 0),  # Place it above the toilet initially
+            always_on_top=True  # Always render on top for better visibility
+        )
+
+
+    def update_health_bar(self):
+        # Update the health bar size based on the current health
+        health_ratio = max(self.health / self.max_health, 0)  # Ensure health ratio is not below 0
+        self.health_bar.scale_x = health_ratio * 3  # Scale X-axis based on health (max length of 3)
+
+        # Change color based on health (Green -> Yellow -> Red)
+        if health_ratio > 0.5:
+            self.health_bar.color = color.green
+        elif 0.2 < health_ratio <= 0.5:
+            self.health_bar.color = color.yellow
+        else:
+            self.health_bar.color = color.red
+
+        # Update the position to always hover above the toilet
+        self.health_bar.position = self.entity.position + Vec3(0, 3, 0)  # Keep it above the entity
+
+        # Ensure the health bar always faces the camera (billboarding effect)
+        direction = (self.player_entity.position - self.health_bar.world_position).normalized()
+        self.health_bar.rotation = Vec3(0, degrees(atan2(direction.x, direction.z)), 0)
 
     def flush(self, player):
-        print("Fancy toilet flush with music!")
+
 
         distance_to_player = (self.player_entity.position - self.entity.position).length()
         current_time = time.time()
         if distance_to_player < 3 and current_time - self.last_attack_time >= 1:
-
             player.decrement_health(random.randint(3, 5))
             Audio('hit_sound.mp3', autoplay=True)  # Add hit sound playback here
             self.last_attack_time = current_time
 
+    def decrement_health(self, amount):
+        self.health -= amount
+        if self.health < 0:
+            self.health = 0
+        self.update_health_bar()  # Update the health bar to reflect new health
 
 ###############################################################################
 ###############################################################################

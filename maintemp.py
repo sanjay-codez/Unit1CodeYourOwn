@@ -56,33 +56,12 @@ def start_game():
 
 # Set up the game loop
 def update():
-
-    #global flush_pressed
-
-    #player shooting stuff
     if player:
         player.update()
 
-        # if mouse.left:  #shooting
-        #     player.shoot()
-
-
-    #toilet attacking stuff
     for toilet in toilets:
         toilet.flush(player)
-
-
-
-        # #check for interactions with toilets
-        # for toilet in toilets:
-        #     if (player.controller.position - toilet.entity.position).length() < 3:
-        #         print(f"Near the {toilet.__class__.__name__}! Press 'F' to flush.")
-        #         if keyboard.is_pressed('f') and not flush_pressed:  # Check if 'f' was pressed, not held
-        #             toilet.flush()
-        #             player.decrement_health(1)
-        #             flush_pressed = True
-        #         if not keyboard.is_pressed('f'):
-        #             flush_pressed = False
+        toilet.update_health_bar()  # Update health text every frame
 
 app.update = update
 
