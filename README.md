@@ -1,5 +1,4 @@
 # Unit1CodeYourOwn
-# Python FPS Game
 
 This is a First-Person Shooter (FPS) game built using the `Ursina` engine.
 
